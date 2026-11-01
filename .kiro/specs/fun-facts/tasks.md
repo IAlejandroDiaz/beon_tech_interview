@@ -10,16 +10,19 @@ existing `/ask` behavior intact.
 
 ## Task Dependency Graph
 
-```
-1 (VectorStore.sample/size) ─┐
-2 (fun-fact prompt)          ├─► 5 (GET /fun-fact handler) ─► 6 (unit tests) ─► 7 (Bruno) ─► 8 (e2e verify)
-3 (widen Source.score) ──────┤
-4 (FunFactResponse model) ───┘
-```
+Tasks 1-4 are independent foundations; task 5 composes them; 6 and 7 verify; 8
+is the final end-to-end check.
 
-- Tasks 1–4 are independent of each other and can be done in any order.
-- Task 5 depends on 1, 2, 3, and 4.
-- Task 6 depends on 5. Task 7 depends on 5. Task 8 depends on 6 and 7.
+```json
+{
+  "waves": [
+    { "wave": 1, "tasks": ["1", "2", "3", "4"] },
+    { "wave": 2, "tasks": ["5"] },
+    { "wave": 3, "tasks": ["6", "7"] },
+    { "wave": 4, "tasks": ["8"] }
+  ]
+}
+```
 
 ## Tasks
 
