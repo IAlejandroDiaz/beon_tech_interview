@@ -1,0 +1,31 @@
+meta {
+  name: RAG Health
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{ragUrl}}/health
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  ragUrl:  http://127.0.0.1:8001
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ok
+  res.body.service: eq rag
+}
+
+tests {
+  test("rag health returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("rag service is ok", function () {
+    expect(res.getBody().status).to.equal("ok");
+  });
+}

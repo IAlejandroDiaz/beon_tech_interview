@@ -1,0 +1,19 @@
+{
+  // Build config used ONLY for debugging. Emits real .js + .js.map into dist/
+  // so the VS Code debugger can verify the generated file on disk and follow
+  // the sourcemap back to the .ts — which is what makes breakpoints bind
+  // reliably (tsx/native type-stripping trips js-debug's disk verification).
+  //
+  // `rewriteRelativeImportExtensions` turns the source `./server.ts` imports
+  // into `./server.js` in the emitted output so Node can resolve them.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true
+  },
+  "include": ["src/express/server.ts", "src/graphql/server.ts"]
+}

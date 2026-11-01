@@ -1,0 +1,53 @@
+meta {
+  name: RAG Ask
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{ragUrl}}/ask
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "question": "What services does BEON.tech offer?",
+    "top_k": 2
+  }
+}
+
+vars:pre-request {
+  ragUrl:  http://127.0.0.1:8001
+}
+
+assert {
+  res.status: eq 200
+  res.body.question: eq What services does BEON.tech offer?
+  res.body.model: isDefined
+}
+
+tests {
+  test("rag ask returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("rag ask echoes the question", function () {
+    expect(res.getBody().question).to.equal("What services does BEON.tech offer?");
+  });
+
+  test("rag ask returns a non-empty answer", function () {
+    expect(res.getBody().answer).to.be.a("string").and.not.empty;
+  });
+
+  test("rag ask returns retrieved sources", function () {
+    const sources = res.getBody().sources;
+    expect(sources).to.be.an("array").with.length.above(0);
+    expect(sources[0]).to.have.property("text");
+    expect(sources[0]).to.have.property("score");
+  });
+}

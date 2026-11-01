@@ -1,0 +1,57 @@
+{
+  // Debug configs for the interview boilerplate.
+  //
+  // WHY COMPILE-THEN-DEBUG: debugging TS straight through tsx or Node's native
+  // type-stripping makes js-debug reject breakpoints — the running content
+  // differs from the raw .ts on disk, so "disk verification" fails and every
+  // breakpoint greys out / stays unbound. The reliable fix is the classic one:
+  // compile to real dist/*.js + .js.map (the `build:debug` task via
+  // tsconfig.debug.json), launch the .js, and let js-debug follow the sourcemap
+  // back to the .ts. The generated .js matches disk, so breakpoints BIND.
+  //
+  // `preLaunchTask` rebuilds before each launch; `outFiles` tells js-debug where
+  // the compiled output + sourcemaps live. `runtimeVersion` pins nvm Node 26.
+  //
+  // Dev/run/test still use tsx (npm run dev:*, npm test) — ONLY debugging uses
+  // the compiled output.
+  //
+  // Usage: breakpoint on an executable statement inside a handler/resolver (not
+  // an object-literal property line), launch, hit the endpoint (curl / Bruno).
+  // Keep the session running while you make requests.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: Express (3000)",
+      "type": "node",
+      "request": "launch",
+      "runtimeVersion": "26.13.0",
+      "preLaunchTask": "build:debug",
+      "program": "${workspaceFolder}/dist/express/server.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug: GraphQL (4000)",
+      "type": "node",
+      "request": "launch",
+      "runtimeVersion": "26.13.0",
+      "preLaunchTask": "build:debug",
+      "program": "${workspaceFolder}/dist/graphql/server.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      // Debug both servers at once — breakpoints work in either.
+      "name": "Debug: Both servers",
+      "configurations": ["Debug: Express (3000)", "Debug: GraphQL (4000)"]
+    }
+  ]
+}

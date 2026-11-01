@@ -1,0 +1,31 @@
+meta {
+  name: Express Health
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{expressUrl}}/health
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  expressUrl: http://localhost:3000
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ok
+  res.body.service: eq express
+}
+
+tests {
+  test("express health returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("express service is ok", function () {
+    expect(res.getBody().status).to.equal("ok");
+  });
+}

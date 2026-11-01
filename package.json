@@ -1,0 +1,31 @@
+{
+  "name": "beon-tech-interview",
+  "version": "1.0.0",
+  "description": "Express + GraphQL TypeScript backend for interview demo",
+  "type": "module",
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "scripts": {
+    "dev:express": "tsx watch src/express/server.ts",
+    "start:express": "tsx src/express/server.ts",
+    "dev:graphql": "tsx watch src/graphql/server.ts",
+    "start:graphql": "tsx src/graphql/server.ts",
+    "typecheck": "tsc",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "express": "^5.3.0",
+    "graphql": "^16.14.2"
+  },
+  "devDependencies": {
+    "@graphql-tools/schema": "^11.0.7",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.3.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

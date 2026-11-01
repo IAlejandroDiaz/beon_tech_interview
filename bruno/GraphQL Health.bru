@@ -1,0 +1,45 @@
+meta {
+  name: GraphQL Health
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphqlUrl}}/
+  body: graphql
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:graphql {
+  query {
+    health {
+      status
+      service
+      timestamp
+    }
+  }
+}
+
+vars:pre-request {
+  graphqlUrl: http://localhost:4000/
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.health.status: eq ok
+  res.body.data.health.service: eq graphql
+}
+
+tests {
+  test("graphql health returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("graphql health status is ok", function () {
+    expect(res.getBody().data.health.status).to.equal("ok");
+  });
+}

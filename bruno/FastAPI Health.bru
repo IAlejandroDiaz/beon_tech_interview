@@ -1,0 +1,31 @@
+meta {
+  name: FastAPI Health
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{fastapiUrl}}/health
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  fastapiUrl:  http://127.0.0.1:8000
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ok
+  res.body.service: eq fastapi
+}
+
+tests {
+  test("fastapi health returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("fastapi service is ok", function () {
+    expect(res.getBody().status).to.equal("ok");
+  });
+}

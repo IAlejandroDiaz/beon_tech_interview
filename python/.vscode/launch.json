@@ -1,0 +1,52 @@
+{
+  // Python debug configs (FastAPI side).
+  //
+  // Python debugging is simple compared to the Node side: the interpreter runs
+  // your .py source directly — no transpile, no sourcemaps, no disk-verification
+  // problem. Breakpoints bind straight in the .py files.
+  //
+  // The ONE requirement: use the project's uv virtualenv interpreter so FastAPI
+  // / uvicorn are importable. `python` below points at .venv/bin/python.
+  //
+  // Usage: set a breakpoint on a statement inside a handler (e.g. the `return`
+  // in /echo), run "Debug: FastAPI (8000)", then hit the endpoint (curl / Bruno).
+  // Execution pauses. Keep the session running while you make requests.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Main config: launch uvicorn under the debugger so request handlers hit.
+      "name": "Debug: FastAPI (8000)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["src.rest.main:app", "--port", "8000"],
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      // Debug the file currently open in the editor.
+      "name": "Debug: Current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      // Debug the pytest suite (set breakpoints in tests or in app code).
+      "name": "Debug: Pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-v"],
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+meta {
+  name: GraphQL Echo
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphqlUrl}}/
+  body: graphql
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:graphql {
+  mutation Echo($message: String!) {
+    echo(message: $message) {
+      received
+      length
+      timestamp
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "message": "hello from bruno"
+  }
+}
+
+vars:pre-request {
+  graphqlUrl: http://localhost:4000/
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.echo.received: eq hello from bruno
+  res.body.data.echo.length: eq 16
+}
+
+tests {
+  test("graphql echo returns 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("graphql echo returns the message back", function () {
+    expect(res.getBody().data.echo.received).to.equal("hello from bruno");
+  });
+}
